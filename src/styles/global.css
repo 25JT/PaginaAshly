@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ashly-bg: #040711;
+  --color-ashly-card: #080d1e;
+  --color-ashly-panel: #090f24;
+  --color-ashly-cyan: #17b8fe;
+  --color-ashly-cyan-dark: #0c4a6e;
+  --color-ashly-cyan-glow: rgba(23, 184, 254, 0.35);
+  --color-ashly-purple: #581c87;
+  --color-ashly-purple-btn: #4c1d95;
+  --color-ashly-purple-neon: #a855f7;
+  --color-ashly-border: #16223f;
+  --color-ashly-text: #f1f5f9;
+  --color-ashly-muted: #94a3b8;
+
+  --font-sora: 'Sora', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --shadow-glow-cyan: 0 0 25px rgba(23, 184, 254, 0.28);
+  --shadow-glow-purple: 0 0 25px rgba(168, 85, 247, 0.28);
+  --shadow-window: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(23, 184, 254, 0.2);
+}
+
+/* Custom UI Stylesheet */
+.dot-matrix-bg {
+  background-color: #040711;
+  background-image: radial-gradient(rgba(23, 184, 254, 0.16) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dot-matrix-dense {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Custom clean scrollbars matching software UI */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #060b18;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #17b8fe;
+}
+
+.neon-border-pulse {
+  box-shadow: 0 0 0 1px rgba(23, 184, 254, 0.4), 0 0 15px rgba(23, 184, 254, 0.25);
+}
