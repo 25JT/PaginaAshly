@@ -3,7 +3,7 @@ import "../styles/global.css";
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" class="lenis">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,7 +15,12 @@ import "../styles/global.css";
     <meta name="generator" content={Astro.generator} />
     <title>Ashly - Asistente Virtual IA &amp; VTuber Inteligente Local</title>
     <!-- Preload del logo oficial para LCP y preloader instantáneo -->
-    <link rel="preload" as="image" href="/ashly-logo-256.webp" type="image/webp" />
+    <link
+      rel="preload"
+      as="image"
+      href="/ashly-logo-256.webp"
+      type="image/webp"
+    />
 
     <!-- Anti-FOUC (Previene parpadeo y efecto de recarga antes de GSAP) -->
     <script is:inline>
@@ -131,7 +136,9 @@ import "../styles/global.css";
       id="global-dot-canvas"
       class="fixed inset-0 pointer-events-none z-0 w-full h-full"></canvas>
 
-    <div class="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-hidden min-w-0">
+    <div
+      class="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-hidden min-w-0"
+    >
       <slot />
     </div>
 
