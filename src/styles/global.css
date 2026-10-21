@@ -46,22 +46,38 @@
 }
 
 /* Custom clean scrollbars matching software UI */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track {
-  background: #060b18;
+  background: #030712;
 }
 
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
-  border-radius: 3px;
+  border-radius: 4px;
+  border: 2px solid #030712;
 }
 
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:hover {
   background: #17b8fe;
+}
+
+/* Soporte estándar para Firefox */
+html,
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b #030712;
 }
 
 .neon-border-pulse {
@@ -74,7 +90,12 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
+  overflow-y: auto;
   position: relative;
+}
+
+body {
+  overflow-y: visible;
 }
 
 @supports not (overflow-x: clip) {
