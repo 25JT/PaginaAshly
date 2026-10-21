@@ -7,8 +7,11 @@ import "../styles/global.css";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
     <title>Ashly - Asistente Virtual IA &amp; VTuber Inteligente Local</title>
     <!-- Google Fonts: Sora, Inter & JetBrains Mono -->
@@ -22,9 +25,16 @@ import "../styles/global.css";
   <body
     class="bg-ashly-bg text-slate-100 font-sans antialiased selection:bg-ashly-cyan selection:text-black min-h-screen relative overflow-x-hidden"
   >
-    <slot />
+    <!-- Canvas interactivo global: Matriz de puntos y difuminado dinámico con cursor -->
+    <canvas
+      id="global-dot-canvas"
+      class="fixed inset-0 pointer-events-none z-0 w-full h-full"></canvas>
 
-    <!-- Script Central de Animaciones GSAP y ScrollTrigger -->
+    <div class="relative z-10 flex flex-col min-h-screen">
+      <slot />
+    </div>
+
+    <!-- Script Central de Animaciones GSAP, ScrollTrigger, Lenis y Canvas -->
     <script src="../assets/animaciones-gsap/animations.js"></script>
   </body>
 </html>

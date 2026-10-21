@@ -6,13 +6,20 @@
  * Este archivo controla:
  * 0. Desplazamiento ultra-suave (Smooth Scroll) mediante Lenis sincronizado
  *    con el Ticker de GSAP y ScrollTrigger.
- * 1. Animación exclusiva de entrada de la barra de navegación (Navbar).
- * 2. Micro-interacciones de hover sobre cada elemento de la Nav.
- * 3. Animación de entrada y reposo continuo para la tipografía del Hero.
- * 4. Animaciones disparadas por Scroll (ScrollTrigger) a lo largo de toda la página
- *    (Eventos de auditoría en tiempo real, tarjetas de capacidades, descargas,
- *    tarjetas de donaciones, acordeón de preguntas frecuentes FAQ y footer).
- * 5. Navegación fluida por enlaces ancla (#auditoria, #descarga, etc.) mediante Lenis.
+ * 1. Fondo interactivo global: Matriz de puntos y orbes difuminados reactivos
+ *    al cursor (Canvas 2D de alto rendimiento con paralaje y resplandor neón).
+ * 2. Transiciones Cinemáticas Variadas entre Secciones (Pinning + Lenis Scroll):
+ *    - Escena 1 (Auditoría): Mega Zoom Frontal 30x (Warp Speed Zoom-Through estilo Lenis).
+ *    - Escena 2 (Capacidades): Desplazamiento Lateral Cinematográfico (Opposing Kinetic Split).
+ *    - Escena 3 (Descargas): Zoom Negativo / Dolly-Out 3D (Deep Space Pullback).
+ *    - Escena 4 (Donaciones): Rotación 3D Isométrica (Perspective Monolith Flip).
+ *    - Escena 5 (FAQ): Despliegue de Horizonte 3D con Escaneo Láser Esmeralda.
+ * 3. Entrada suave (Scale-up) de cada sección vinculada a la salida de cada transición.
+ * 4. Animación exclusiva de entrada de la barra de navegación (Navbar).
+ * 5. Micro-interacciones de hover sobre cada elemento de la Nav.
+ * 6. Animación de entrada y reposo continuo para la tipografía del Hero.
+ * 7. Animaciones de scroll para el contenido interno de cada sección.
+ * 8. Navegación fluida por enlaces ancla (#auditoria, #descarga, etc.) mediante Lenis.
  * ==============================================================================
  */
 
@@ -36,35 +43,31 @@ let lenisInstance = null;
  * Se sincroniza al 100% con el requestAnimationFrame (raf) de GSAP.
  */
 function initSmoothScrollLenis() {
-  // Evitar doble inicialización
   if (lenisInstance) return lenisInstance;
 
   lenisInstance = new Lenis({
-    duration: 1.25, // Duración de la desaceleración suave
+    duration: 1.25,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva exponencial suave estándar
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
-    wheelMultiplier: 0.95, // Sensibilidad equilibrada de la rueda
+    wheelMultiplier: 0.95,
     touchMultiplier: 1.8,
     infinite: false,
   });
 
-  // 0.1 Sincronizar el scroll de Lenis con ScrollTrigger para que las coordenadas
-  // de disparo se actualicen en tiempo real durante la inercia
+  // 0.1 Sincronizar el scroll de Lenis con ScrollTrigger
   lenisInstance.on('scroll', ScrollTrigger.update);
 
   // 0.2 Conectar el motor de cuadros de Lenis al Ticker principal de GSAP
-  // Esto elimina cualquier efecto de tirón o parpadeo (60fps / 120fps nativos)
   gsap.ticker.add((time) => {
     lenisInstance.raf(time * 1000);
   });
 
-  // 0.3 Desactivar el lagSmoothing de GSAP para que el scroll responda de inmediato
+  // 0.3 Desactivar el lagSmoothing de GSAP para evitar saltos
   gsap.ticker.lagSmoothing(0);
 
   // 0.4 Navegación suave al pulsar cualquier enlace con ancla (#)
-  // (ej. "Memoria & Auditoría", "Descargas", "Donaciones", "FAQ")
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', (e) => {
       const targetId = anchor.getAttribute('href');
@@ -73,8 +76,6 @@ function initSmoothScrollLenis() {
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
         e.preventDefault();
-        // Desplazamiento cinematográfico hasta la sección,
-        // compensando la altura de la cabecera fija (-70px)
         lenisInstance.scrollTo(targetElement, {
           offset: -70,
           duration: 1.3,
@@ -89,11 +90,408 @@ function initSmoothScrollLenis() {
 
 /**
  * ------------------------------------------------------------------------------
- * 1. ANIMACIÓN DE ENTRADA DE LA BARRA DE NAVEGACIÓN (Solo al cargar la página)
+ * 1. FONDO GLOBAL INTERACTIVO: MATRIZ DE PUNTOS Y DIFUMINADO AL CURSOR
  * ------------------------------------------------------------------------------
- * Hace que el header descienda suavemente desde la parte superior de la pantalla
- * y que sus elementos internos (logo, enlaces, badge de estado y botón)
- * aparezcan de manera escalonada y armónica.
+ * Dibuja un lienzo fijo a pantalla completa con la cuadrícula de puntos cian
+ * que responde en tiempo real al movimiento del cursor:
+ * - Los puntos se iluminan suavemente al pasar el ratón cerca (Spotlight dinámico).
+ * - La matriz completa tiene un paralaje sutil al mover el cursor.
+ * - Dos orbes ambientales difuminados (cian y púrpura) flotan de fondo con cadencia orgánica.
+ */
+function initGlobalDotMatrixCanvas() {
+  const canvas = document.querySelector('#global-dot-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+
+  // Parámetros de la matriz de puntos
+  const DOT_SPACING = 30; // Distancia entre puntos (px)
+  const BASE_DOT_SIZE = 1.8; // Tamaño del punto en reposo
+  const INTERACTION_RADIUS = 190; // Radio de iluminación alrededor del cursor
+
+  // Coordenadas con interpolación suave (Lerp)
+  let mouse = {
+    x: -1000,
+    y: -1000,
+    targetX: -1000,
+    targetY: -1000,
+  };
+
+  let orbTime = 0;
+  let isVisible = true;
+
+  // Manejo de redimensionamiento con soporte Retina (DPR)
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    ctx.scale(dpr, dpr);
+  }
+
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+
+  // Escuchar movimiento del cursor
+  window.addEventListener('pointermove', (e) => {
+    mouse.targetX = e.clientX;
+    mouse.targetY = e.clientY;
+  }, { passive: true });
+
+  // Posición inicial centrada para el efecto de bienvenida
+  mouse.x = width / 2;
+  mouse.y = height / 3;
+  mouse.targetX = width / 2;
+  mouse.targetY = height / 3;
+
+  // Pausar renderizado cuando la pestaña no está visible (ahorro de batería/recursos)
+  document.addEventListener('visibilitychange', () => {
+    isVisible = !document.hidden;
+    if (isVisible) requestAnimationFrame(render);
+  });
+
+  function render() {
+    if (!isVisible) return;
+
+    // Suavizado Lerp de la posición del ratón
+    mouse.x += (mouse.targetX - mouse.x) * 0.08;
+    mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+    orbTime += 0.007;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // 1.1 Resplandor difuminado ambiental (Orbe Cian superior flotante)
+    const orb1X = width * 0.48 + Math.sin(orbTime) * 110;
+    const orb1Y = height * 0.32 + Math.cos(orbTime * 0.8) * 70;
+    const radGlow1 = ctx.createRadialGradient(orb1X, orb1Y, 0, orb1X, orb1Y, 480);
+    radGlow1.addColorStop(0, 'rgba(23, 184, 254, 0.08)');
+    radGlow1.addColorStop(1, 'rgba(23, 184, 254, 0)');
+    ctx.fillStyle = radGlow1;
+    ctx.fillRect(0, 0, width, height);
+
+    // 1.2 Resplandor difuminado ambiental (Orbe Púrpura inferior flotante)
+    const orb2X = width * 0.62 + Math.cos(orbTime * 0.7) * 90;
+    const orb2Y = height * 0.65 + Math.sin(orbTime * 0.9) * 85;
+    const radGlow2 = ctx.createRadialGradient(orb2X, orb2Y, 0, orb2X, orb2Y, 440);
+    radGlow2.addColorStop(0, 'rgba(168, 85, 247, 0.06)');
+    radGlow2.addColorStop(1, 'rgba(168, 85, 247, 0)');
+    ctx.fillStyle = radGlow2;
+    ctx.fillRect(0, 0, width, height);
+
+    // 1.3 Resplandor Spotlight dinámico centrado en el cursor del usuario
+    if (mouse.x > -500) {
+      const spotGlow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, INTERACTION_RADIUS * 1.35);
+      spotGlow.addColorStop(0, 'rgba(23, 184, 254, 0.15)');
+      spotGlow.addColorStop(0.5, 'rgba(23, 184, 254, 0.05)');
+      spotGlow.addColorStop(1, 'rgba(23, 184, 254, 0)');
+      ctx.fillStyle = spotGlow;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    // 1.4 Paralaje suave de la cuadrícula de puntos según el ángulo del ratón
+    const parallaxX = ((mouse.x - width / 2) / width) * 12;
+    const parallaxY = ((mouse.y - height / 2) / height) * 12;
+
+    const startX = -DOT_SPACING + (parallaxX % DOT_SPACING);
+    const startY = -DOT_SPACING + (parallaxY % DOT_SPACING);
+
+    // 1.5 Dibujado de cada punto con iluminación por proximidad
+    for (let x = startX; x < width + DOT_SPACING; x += DOT_SPACING) {
+      for (let y = startY; y < height + DOT_SPACING; y += DOT_SPACING) {
+        const dx = x - mouse.x;
+        const dy = y - mouse.y;
+        const distSq = dx * dx + dy * dy;
+        const radiusSq = INTERACTION_RADIUS * INTERACTION_RADIUS;
+
+        let size = BASE_DOT_SIZE;
+        let alpha = 0.16;
+
+        if (distSq < radiusSq) {
+          const dist = Math.sqrt(distSq);
+          const factor = 1 - dist / INTERACTION_RADIUS;
+          const easeFactor = factor * factor;
+
+          alpha = 0.16 + easeFactor * 0.80; // Sube hasta 0.96 cerca del cursor
+          size = BASE_DOT_SIZE + easeFactor * 1.6;
+
+          if (factor > 0.45) {
+            ctx.fillStyle = `rgba(23, 184, 254, ${(factor - 0.45) * 0.35})`;
+            ctx.beginPath();
+            ctx.arc(x, y, size * 2.2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        ctx.fillStyle = `rgba(23, 184, 254, ${alpha})`;
+        ctx.fillRect(x - size / 2, y - size / 2, size, size);
+      }
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
+
+/**
+ * ------------------------------------------------------------------------------
+ * 2. TRANSICIONES CINEMÁTICAS VARIADAS ENTRE SECCIONES (ScrollTrigger + Lenis)
+ * ------------------------------------------------------------------------------
+ * Cada una de las 5 secciones cuenta con un estilo de transición único:
+ * 1. Auditoría: Mega Zoom Frontal 30x (Warp Speed Zoom-Through).
+ * 2. Capacidades: Desplazamiento Lateral Cinematográfico (Opposing Kinetic Split).
+ * 3. Descargas: Zoom Negativo / Dolly-Out 3D (Deep Space Pullback).
+ * 4. Donaciones: Rotación Isométrica 3D (Perspective Monolith Flip).
+ * 5. FAQ: Despliegue de Horizonte 3D con Escaneo Láser Esmeralda.
+ */
+function initCreativeSectionTransitions() {
+
+  // ============================================================================
+  // ESCENA 1 (Auditoría): Mega Zoom Frontal (Warp Speed Zoom-Through)
+  // ============================================================================
+  const scene1 = document.querySelector('.transition-scene-1');
+  if (scene1) {
+    const warpContent = scene1.querySelector('.zoom-warp-content');
+    const warpHuge = scene1.querySelector('.zoom-warp-heading');
+
+    const tl1 = gsap.timeline({
+      scrollTrigger: {
+        trigger: scene1,
+        start: 'top top',
+        end: '+=45%',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+      },
+    });
+
+    tl1
+      .to(warpHuge, {
+        scale: 20,
+        transformOrigin: '50% 50%',
+        ease: 'power2.in',
+        duration: 0.8,
+      })
+      .to(warpContent, {
+        opacity: 0,
+        filter: 'blur(10px)',
+        duration: 0.35,
+        ease: 'power1.in',
+      }, '-=0.35');
+  }
+
+  // ============================================================================
+  // ESCENA 2 (Capacidades): Desplazamiento Lateral Cinematográfico (Kinetic Split)
+  // ============================================================================
+  const scene2 = document.querySelector('.transition-scene-2');
+  if (scene2) {
+    const splitWrap = scene2.querySelector('.lateral-split-wrapper');
+    const splitLeft = scene2.querySelector('.lateral-split-left');
+    const splitRight = scene2.querySelector('.lateral-split-right');
+    const splitBeam = scene2.querySelector('.lateral-split-beam');
+    const splitBadge = scene2.querySelector('.lateral-split-badge');
+    const splitSub = scene2.querySelector('.lateral-split-sub');
+
+    const tl2 = gsap.timeline({
+      scrollTrigger: {
+        trigger: scene2,
+        start: 'top top',
+        end: '+=45%',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+      },
+    });
+
+    tl2
+      // 1. El rayo de luz neón se expande dividiendo la pantalla
+      .to(splitBeam, {
+        width: '100vw',
+        duration: 0.3,
+        ease: 'power2.out',
+      })
+      // 2. "MOTOR" sale disparado velozmente hacia la IZQUIERDA
+      .to(splitLeft, {
+        x: '-90vw',
+        opacity: 0,
+        filter: 'blur(10px)',
+        duration: 0.7,
+        ease: 'power2.in',
+      }, '-=0.1')
+      // 3. "PLANNER" sale disparado velozmente hacia la DERECHA
+      .to(splitRight, {
+        x: '90vw',
+        opacity: 0,
+        filter: 'blur(10px)',
+        duration: 0.7,
+        ease: 'power2.in',
+      }, '<')
+      // 4. Se desvanecen los elementos auxiliares
+      .to([splitBeam, splitBadge, splitSub, splitWrap], {
+        opacity: 0,
+        duration: 0.25,
+      }, '-=0.3');
+  }
+
+  // ============================================================================
+  // ESCENA 3 (Descargas): Zoom Negativo / Dolly-Out 3D (Deep Space Pullback)
+  // ============================================================================
+  const scene3 = document.querySelector('.transition-scene-3');
+  if (scene3) {
+    const dollyWrap = scene3.querySelector('.dolly-out-wrapper');
+    const dollyHeading = scene3.querySelector('.dolly-out-heading');
+    const dollyHud = scene3.querySelector('.dolly-out-hud');
+
+    const tl3 = gsap.timeline({
+      scrollTrigger: {
+        trigger: scene3,
+        start: 'top top',
+        end: '+=45%',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+      },
+    });
+
+    tl3
+      // Zoom Negativo (Dolly-Out 3D): parte nítido en 1.0x y retrocede hacia el fondo disolviéndose suavemente
+      .to(dollyHeading, {
+        scale: 0.65,
+        opacity: 0.2,
+        transformOrigin: '50% 50%',
+        duration: 0.6,
+        ease: 'power2.in',
+      })
+      .to(dollyHud, {
+        opacity: 0,
+        scale: 0.8,
+        duration: 0.35,
+        ease: 'power2.in',
+      }, '-=0.4')
+      .to(dollyWrap, {
+        opacity: 0,
+        y: -35,
+        duration: 0.3,
+        ease: 'power2.in',
+      }, '-=0.2');
+  }
+
+  // ============================================================================
+  // ESCENA 4 (Donaciones): Rotación 3D Isométrica (Perspective Monolith Flip)
+  // ============================================================================
+  const scene4 = document.querySelector('.transition-scene-4');
+  if (scene4) {
+    const wrap3D = scene4.querySelector('.perspective-3d-wrapper');
+
+    const tl4 = gsap.timeline({
+      scrollTrigger: {
+        trigger: scene4,
+        start: 'top top',
+        end: '+=45%',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+      },
+    });
+
+    tl4
+      .to(wrap3D, {
+        rotateX: -45,
+        rotateY: 25,
+        scale: 0.7,
+        opacity: 0,
+        y: -80,
+        duration: 0.7,
+        ease: 'power2.in',
+      });
+  }
+
+  // ============================================================================
+  // ESCENA 5 (FAQ): Despliegue de Horizonte 3D con Escaneo Láser Esmeralda
+  // ============================================================================
+  const scene5 = document.querySelector('.transition-scene-5');
+  if (scene5) {
+    const laserWrap = scene5.querySelector('.laser-unfold-wrapper');
+    const laserLine = scene5.querySelector('.laser-sweep-line');
+
+    const tl5 = gsap.timeline({
+      scrollTrigger: {
+        trigger: scene5,
+        start: 'top top',
+        end: '+=45%',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+      },
+    });
+
+    tl5
+      .fromTo(laserLine, { top: '0%', opacity: 1 }, { top: '100%', opacity: 0.2, duration: 0.45, ease: 'linear' })
+      .to(laserWrap, {
+        y: -60,
+        opacity: 0,
+        filter: 'blur(8px)',
+        duration: 0.4,
+        ease: 'power2.in',
+      }, '-=0.2');
+  }
+}
+
+/**
+ * ------------------------------------------------------------------------------
+ * 3. TRANSICIONES DE ESCALA SUAVE EN LAS SECCIONES DE CONTENIDO
+ * ------------------------------------------------------------------------------
+ * Acompaña a la salida de cada transición cinemática haciendo que el contenido
+ * de la sección (#auditoria, #capacidades, #descarga, #donaciones, #faq)
+ * entre con una escala suave desde 0.88 hasta 1.0.
+ */
+function initSectionZoomTransitions() {
+  const zoomTargets = document.querySelectorAll('.section-zoom-target');
+
+  zoomTargets.forEach((target) => {
+    const parentSection = target.closest('section');
+    if (!parentSection) return;
+
+    gsap.fromTo(
+      target,
+      {
+        scale: 0.88,
+        opacity: 0.4,
+        y: 50,
+        transformOrigin: 'center top',
+      },
+      {
+        scale: 1,
+        opacity: 1,
+        y: 0,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: parentSection,
+          start: 'top 85%',
+          end: 'top 30%',
+          scrub: 1.2,
+        },
+      }
+    );
+  });
+}
+
+/**
+ * ------------------------------------------------------------------------------
+ * 4. ANIMACIÓN DE ENTRADA DE LA BARRA DE NAVEGACIÓN (Solo al cargar la página)
+ * ------------------------------------------------------------------------------
  */
 function initNavbarEntranceAnimation() {
   const header = document.querySelector('#main-header');
@@ -104,24 +502,16 @@ function initNavbarEntranceAnimation() {
   const statusBadge = header.querySelector('.nav-status-badge');
   const ctaBtn = header.querySelector('.nav-cta-btn');
 
-  // Estado inicial del contenedor de la barra de navegación
-  gsap.set(header, {
-    y: -80,
-    opacity: 0,
-  });
-
-  // Estado inicial de los elementos internos
+  gsap.set(header, { y: -80, opacity: 0 });
   if (brand) gsap.set(brand, { opacity: 0, x: -25, scale: 0.9 });
   if (links.length) gsap.set(links, { opacity: 0, y: -15 });
   if (statusBadge) gsap.set(statusBadge, { opacity: 0, scale: 0.8 });
   if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, x: 25, scale: 0.9 });
 
-  // Línea de tiempo de entrada
   const navTl = gsap.timeline({
     defaults: { ease: 'power3.out' },
     delay: 0.15,
     onComplete: () => {
-      // Limpiar propiedades inline para no interferir con posicionamiento CSS sticky
       gsap.set(header, { clearProps: 'transform,opacity' });
       if (brand) gsap.set(brand, { clearProps: 'opacity,transform,scale' });
       if (links.length) gsap.set(links, { clearProps: 'opacity,transform' });
@@ -130,34 +520,29 @@ function initNavbarEntranceAnimation() {
     }
   });
 
-  // 1.1 Descenso suave del navbar completo
   navTl.to(header, {
     y: 0,
     opacity: 1,
     duration: 0.75,
   })
-  // 1.2 Aparición de la marca y logo
   .to(brand, {
     opacity: 1,
     x: 0,
     scale: 1,
     duration: 0.5,
   }, '-=0.4')
-  // 1.3 Aparición escalonada de los enlaces de navegación
   .to(links, {
     opacity: 1,
     y: 0,
     duration: 0.45,
     stagger: 0.07,
   }, '-=0.35')
-  // 1.4 Aparición del badge de sistema operativo
   .to(statusBadge, {
     opacity: 1,
     scale: 1,
     duration: 0.4,
     ease: 'back.out(1.5)',
   }, '-=0.25')
-  // 1.5 Entrada elástica del botón CTA de descarga
   .to(ctaBtn, {
     opacity: 1,
     x: 0,
@@ -169,16 +554,13 @@ function initNavbarEntranceAnimation() {
 
 /**
  * ------------------------------------------------------------------------------
- * 2. MICRO-INTERACCIONES AL PASAR EL CURSOR (HOVER) EN LA NAVBAR
+ * 5. MICRO-INTERACCIONES AL PASAR EL CURSOR (HOVER) EN LA NAVBAR
  * ------------------------------------------------------------------------------
- * Añade dinamismo reactivo a los elementos de la barra sin modificar su posición
- * pegajosa (sticky) fija en la pantalla.
  */
 function initNavbarHoverInteractions() {
   const header = document.querySelector('#main-header');
   if (!header) return;
 
-  // 2.1 Hover en el Logo de Ashly: ligera escala, rotación y brillo cian
   const logo = header.querySelector('.nav-logo');
   const brand = header.querySelector('.nav-brand');
   if (brand && logo) {
@@ -202,7 +584,6 @@ function initNavbarHoverInteractions() {
     });
   }
 
-  // 2.2 Hover en los Enlaces de Navegación: sutil elevación y resplandor
   const navLinks = header.querySelectorAll('.nav-link');
   navLinks.forEach((link) => {
     link.addEventListener('mouseenter', () => {
@@ -225,8 +606,6 @@ function initNavbarHoverInteractions() {
     });
   });
 
-  // 2.3 Hover en la Insignia de Estado ("SISTEMA 100% OPERATIVO"):
-  // Expande el contenedor y hace pulsar el indicador verde
   const statusBadge = header.querySelector('.nav-status-badge');
   if (statusBadge) {
     const dot = statusBadge.querySelector('span');
@@ -251,8 +630,6 @@ function initNavbarHoverInteractions() {
     });
   }
 
-  // 2.4 Hover en el Botón CTA de Descarga en Nav:
-  // Elevación con sombra luminosa y efecto de click táctil
   const ctaBtn = header.querySelector('.nav-cta-btn');
   if (ctaBtn) {
     ctaBtn.addEventListener('mouseenter', () => {
@@ -284,10 +661,8 @@ function initNavbarHoverInteractions() {
 
 /**
  * ------------------------------------------------------------------------------
- * 3. ANIMACIONES DEL HERO (Tipografía, Entrada y Reposo continuo)
+ * 6. ANIMACIONES DEL HERO (Tipografía, Entrada y Reposo continuo)
  * ------------------------------------------------------------------------------
- * Revela el titular palabra por palabra de forma escalonada con rotación 3D,
- * seguido de una onda flotante continua y resplandor neón en reposo.
  */
 function initHeroAnimations() {
   const heroBadge = document.querySelector('.hero-badge');
@@ -300,7 +675,6 @@ function initHeroAnimations() {
 
   if (!words.length) return;
 
-  // Estado inicial
   gsap.set(heroBadge, { y: -20, opacity: 0 });
   gsap.set(words, { y: 45, opacity: 0, rotateX: -35, filter: 'blur(8px)' });
   gsap.set(desc, { y: 25, opacity: 0 });
@@ -308,7 +682,6 @@ function initHeroAnimations() {
   gsap.set(cta, { scale: 0.9, opacity: 0, y: 20 });
   gsap.set(subtext, { opacity: 0 });
 
-  // Línea de tiempo de entrada al cargar
   const heroTl = gsap.timeline({
     delay: 0.3,
     onComplete: () => {
@@ -345,9 +718,7 @@ function initHeroAnimations() {
     }, '-=0.2')
     .to(subtext, { opacity: 1, duration: 0.5 }, '-=0.3');
 
-  // Animación en reposo continuo cuando ya cargó
   function startHeroIdleLoop() {
-    // 3.1 Onda flotante senoidal continua en cada palabra del titular
     gsap.to(words, {
       y: -5,
       duration: 2.2,
@@ -360,7 +731,6 @@ function initHeroAnimations() {
       },
     });
 
-    // 3.2 Resplandor neón pulsante en "Opera en tu ordenador."
     if (highlight) {
       gsap.to(highlight, {
         filter: 'drop-shadow(0 0 35px rgba(23,184,254,0.85)) drop-shadow(0 0 55px rgba(168,85,247,0.55))',
@@ -371,7 +741,6 @@ function initHeroAnimations() {
       });
     }
 
-    // 3.3 Reacción táctil interactiva al pasar el cursor sobre cualquier palabra
     words.forEach((word) => {
       word.addEventListener('mouseenter', () => {
         gsap.to(word, {
@@ -390,19 +759,12 @@ function initHeroAnimations() {
 
 /**
  * ------------------------------------------------------------------------------
- * 4. ANIMACIONES CON SCROLL (ScrollTrigger) PARA TODA LA PÁGINA
+ * 7. ANIMACIONES DE ELEMENTOS INTERNOS POR SECCIÓN (ScrollTrigger)
  * ------------------------------------------------------------------------------
- * Cada sección se activa con su propio timeline coordinado disparado al 85%
- * del viewport. Se usa 'once: true' y 'clearProps: all' para evitar que
- * cualquier tarjeta o elemento quede bloqueado en opacity: 0.
  */
 function initScrollTriggerAnimations() {
 
-  /**
-   * 4.1 SECCIÓN DE SEGURIDAD & AUDITORÍA (#auditoria)
-   * Anima el encabezado, la ventana del software mockup y las 14 filas
-   * de eventos de auditoría de forma escalonada en un timeline coordinado.
-   */
+  // 7.1 Auditoría & Memoria (#auditoria)
   const auditoriaSection = document.querySelector('#auditoria');
   if (auditoriaSection) {
     const headerBlock = auditoriaSection.querySelector('.text-center');
@@ -459,12 +821,7 @@ function initScrollTriggerAnimations() {
     }
   }
 
-  /**
-   * 4.2 SECCIÓN DE CAPACIDADES CENTRALES (#capacidades)
-   * Se ejecuta en un timeline unificado al entrar la sección.
-   * Garantiza que las 3 tarjetas de capacidades (Planner, Memoria, Local)
-   * siempre aparezcan fluidamente junto al encabezado.
-   */
+  // 7.2 Capacidades Centrales (#capacidades)
   const capacidadesSection = document.querySelector('#capacidades');
   if (capacidadesSection) {
     const capHeader = capacidadesSection.querySelector('.text-center');
@@ -499,30 +856,18 @@ function initScrollTriggerAnimations() {
         clearProps: 'all',
       }, '-=0.3');
 
-      // Micro-interacción al hacer hover en cada tarjeta
       featureCards.forEach((card) => {
         card.addEventListener('mouseenter', () => {
-          gsap.to(card, {
-            y: -7,
-            duration: 0.25,
-            ease: 'power2.out',
-          });
+          gsap.to(card, { y: -7, duration: 0.25, ease: 'power2.out' });
         });
         card.addEventListener('mouseleave', () => {
-          gsap.to(card, {
-            y: 0,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
+          gsap.to(card, { y: 0, duration: 0.35, ease: 'power2.out' });
         });
       });
     }
   }
 
-  /**
-   * 4.3 SECCIÓN DE DESCARGAS (#descarga)
-   * Anima el título, la tarjeta del instalador de Windows y la nota de requisitos.
-   */
+  // 7.3 Descargas (#descarga)
   const descargaSection = document.querySelector('#descarga');
   if (descargaSection) {
     const descHeader = descargaSection.querySelector('.text-center');
@@ -558,7 +903,6 @@ function initScrollTriggerAnimations() {
         clearProps: 'opacity,transform',
       }, '-=0.3');
 
-      // Resplandor pulsante continuo en la tarjeta de descarga
       gsap.to(downloadCard, {
         boxShadow: '0 0 45px rgba(23, 184, 254, 0.45)',
         duration: 2.2,
@@ -578,11 +922,7 @@ function initScrollTriggerAnimations() {
     }
   }
 
-  /**
-   * 4.4 SECCIÓN DE DONACIONES (#donaciones)
-   * Timeline unificado para encabezado y las 3 tarjetas de tiers (Fan, Tester, Sponsor).
-   * Al estar en el mismo timeline, las tarjetas nunca se quedan invisibles.
-   */
+  // 7.4 Donaciones (#donaciones)
   const donacionesSection = document.querySelector('#donaciones');
   if (donacionesSection) {
     const donHeader = donacionesSection.querySelector('.text-center');
@@ -617,35 +957,22 @@ function initScrollTriggerAnimations() {
         clearProps: 'all',
       }, '-=0.3');
 
-      // Efecto hover sobre cada tarjeta de donación
       tierCards.forEach((card) => {
         card.addEventListener('mouseenter', () => {
-          gsap.to(card, {
-            y: -8,
-            duration: 0.25,
-            ease: 'power2.out',
-          });
+          gsap.to(card, { y: -8, duration: 0.25, ease: 'power2.out' });
         });
         card.addEventListener('mouseleave', () => {
-          gsap.to(card, {
-            y: 0,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
+          gsap.to(card, { y: 0, duration: 0.35, ease: 'power2.out' });
         });
       });
     }
   }
 
-  /**
-   * 4.5 SECCIÓN DE PREGUNTAS FRECUENTES FAQ (#faq)
-   * Timeline unificado para encabezado y los acordeones FAQ.
-   * Evita cualquier desajuste de scroll y asegura que las preguntas aparezcan siempre.
-   */
+  // 7.5 Preguntas Frecuentes FAQ (#faq)
   const faqSection = document.querySelector('#faq');
   if (faqSection) {
     const faqHeader = faqSection.querySelector('.text-center');
-    const faqItems = faqSection.querySelectorAll('.space-y-4 > div');
+    const faqItems = faqSection.querySelectorAll('.faq-accordion-list > div, .space-y-4 > div');
 
     const faqTl = gsap.timeline({
       scrollTrigger: {
@@ -675,7 +1002,6 @@ function initScrollTriggerAnimations() {
         clearProps: 'all',
       }, '-=0.25');
 
-      // Micro-interacción hover en las preguntas FAQ
       faqItems.forEach((item) => {
         item.addEventListener('mouseenter', () => {
           gsap.to(item, {
@@ -695,10 +1021,7 @@ function initScrollTriggerAnimations() {
     }
   }
 
-  /**
-   * 4.6 PIE DE PÁGINA (Footer)
-   * Entrada sutil al aproximarse al final de la página.
-   */
+  // 7.6 Pie de Página (Footer)
   const siteFooter = document.querySelector('.site-footer');
   if (siteFooter) {
     gsap.from(siteFooter, {
@@ -720,9 +1043,6 @@ function initScrollTriggerAnimations() {
  * ------------------------------------------------------------------------------
  * GESTIÓN DE RECALCULO DE SCROLLTRIGGER Y LENIS
  * ------------------------------------------------------------------------------
- * Asegura que cuando las fuentes de Google Fonts (Sora, Inter) y las imágenes
- * externas terminen de renderizarse, ScrollTrigger y Lenis recalculen las
- * alturas exactas del documento para un desplazamiento 100% coordinado.
  */
 function setupScrollTriggerRefreshes() {
   const refreshAll = () => {
@@ -732,15 +1052,12 @@ function setupScrollTriggerRefreshes() {
     }
   };
 
-  // 1. Refresco cuando la ventana y todas las imágenes cargan completamente
   window.addEventListener('load', refreshAll);
 
-  // 2. Refresco cuando las fuentes web personalizadas estén listas
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(refreshAll);
   }
 
-  // 3. Refrescos de seguridad tras estabilización del layout dinámico
   setTimeout(refreshAll, 400);
   setTimeout(refreshAll, 1200);
 }
@@ -748,26 +1065,34 @@ function setupScrollTriggerRefreshes() {
 /**
  * ------------------------------------------------------------------------------
  * INICIALIZADOR PRINCIPAL
- * Ejecuta todas las animaciones una vez que el DOM está listo en el navegador.
  * ------------------------------------------------------------------------------
  */
 function initAllAnimations() {
-  // 0. Inicialización de Lenis Smooth Scroll y sincronización con GSAP
+  // 0. Motor de desplazamiento suave Lenis
   initSmoothScrollLenis();
 
-  // 1. Animación de entrada exclusiva de la Navbar (solo al cargar)
+  // 1. Lienzo global interactivo de matriz de puntos y resplandor al cursor
+  initGlobalDotMatrixCanvas();
+
+  // 2. Transiciones Cinemáticas Variadas entre Secciones (Zoom, Split, Dolly, 3D, Láser)
+  initCreativeSectionTransitions();
+
+  // 3. Transiciones de escala suave de las secciones de contenido
+  initSectionZoomTransitions();
+
+  // 4. Animación de entrada exclusiva de la Navbar (solo al cargar)
   initNavbarEntranceAnimation();
 
-  // 2. Micro-interacciones de cursor (hover) dentro de la Navbar
+  // 5. Micro-interacciones de cursor (hover) dentro de la Navbar
   initNavbarHoverInteractions();
 
-  // 3. Animación tipográfica y elementos del Hero
+  // 6. Animación tipográfica y elementos del Hero
   initHeroAnimations();
 
-  // 4. Animaciones de scroll vinculadas a la posición del usuario (ScrollTrigger)
+  // 7. Animaciones de scroll para elementos internos
   initScrollTriggerAnimations();
 
-  // 5. Configuración de refrescos automáticos de ScrollTrigger y Lenis
+  // 8. Configuración de refrescos automáticos de ScrollTrigger y Lenis
   setupScrollTriggerRefreshes();
 }
 
