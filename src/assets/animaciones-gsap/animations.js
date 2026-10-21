@@ -252,6 +252,9 @@ function initGlobalDotMatrixCanvas() {
  * 5. FAQ: Despliegue de Horizonte 3D con Escaneo Láser Esmeralda.
  */
 function initCreativeSectionTransitions() {
+  // Función auxiliar para determinar el punto de inicio responsive
+  // En móviles inicia un poco más arriba de la mitad (top 28%) para que el usuario no tenga que subir las letras hasta el borde superior
+  const getSceneStart = () => (window.innerWidth < 768 ? 'top 28%' : 'top top');
 
   // ============================================================================
   // ESCENA 1 (Auditoría): Mega Zoom Frontal (Warp Speed Zoom-Through)
@@ -264,7 +267,7 @@ function initCreativeSectionTransitions() {
     const tl1 = gsap.timeline({
       scrollTrigger: {
         trigger: scene1,
-        start: 'top top',
+        start: getSceneStart,
         end: '+=45%',
         pin: true,
         pinSpacing: true,
@@ -303,7 +306,7 @@ function initCreativeSectionTransitions() {
     const tl2 = gsap.timeline({
       scrollTrigger: {
         trigger: scene2,
-        start: 'top top',
+        start: getSceneStart,
         end: '+=45%',
         pin: true,
         pinSpacing: true,
@@ -313,15 +316,15 @@ function initCreativeSectionTransitions() {
     });
 
     tl2
-      // 1. El rayo de luz neón se expande dividiendo la pantalla
+      // 1. El rayo de luz neón se expande dividiendo la pantalla sin desbordar el viewport
       .to(splitBeam, {
-        width: '100vw',
+        width: '100%',
         duration: 0.3,
         ease: 'power2.out',
       })
-      // 2. "MOTOR" sale disparado velozmente hacia la IZQUIERDA
+      // 2. "MOTOR" sale disparado velozmente hacia la IZQUIERDA usando xPercent para evitar scrollbar horizontal
       .to(splitLeft, {
-        x: '-90vw',
+        xPercent: -120,
         opacity: 0,
         filter: 'blur(10px)',
         duration: 0.7,
@@ -329,7 +332,7 @@ function initCreativeSectionTransitions() {
       }, '-=0.1')
       // 3. "PLANNER" sale disparado velozmente hacia la DERECHA
       .to(splitRight, {
-        x: '90vw',
+        xPercent: 120,
         opacity: 0,
         filter: 'blur(10px)',
         duration: 0.7,
@@ -354,7 +357,7 @@ function initCreativeSectionTransitions() {
     const tl3 = gsap.timeline({
       scrollTrigger: {
         trigger: scene3,
-        start: 'top top',
+        start: getSceneStart,
         end: '+=45%',
         pin: true,
         pinSpacing: true,
@@ -396,7 +399,7 @@ function initCreativeSectionTransitions() {
     const tl4 = gsap.timeline({
       scrollTrigger: {
         trigger: scene4,
-        start: 'top top',
+        start: getSceneStart,
         end: '+=45%',
         pin: true,
         pinSpacing: true,
@@ -428,7 +431,7 @@ function initCreativeSectionTransitions() {
     const tl5 = gsap.timeline({
       scrollTrigger: {
         trigger: scene5,
-        start: 'top top',
+        start: getSceneStart,
         end: '+=45%',
         pin: true,
         pinSpacing: true,
@@ -1068,6 +1071,74 @@ function setupScrollTriggerRefreshes() {
 
 /**
  * ------------------------------------------------------------------------------
+ * PRELOADER DE INICIO CON LOGO DE ASHLY
+ * ------------------------------------------------------------------------------
+ * Muestra el logo de Ashly con un anillo holográfico y barra de progreso
+ * mientras se cargan los recursos principales. Al completarse la carga,
+ * se retira con una transición fluida y da paso al Hero y Navbar.
+ */
+function initPreloader(onCompleteCallback) {
+  const preloader = document.querySelector('#preloader');
+  if (!preloader) {
+    if (onCompleteCallback) onCompleteCallback();
+    return;
+  }
+
+  let isDismissed = false;
+
+  function dismiss() {
+    if (isDismissed) return;
+    isDismissed = true;
+
+    const content = preloader.querySelector('.preloader-content');
+    const logoRing = preloader.querySelector('.preloader-logo-ring');
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        preloader.style.display = 'none';
+        preloader.remove();
+        if (onCompleteCallback) onCompleteCallback();
+      },
+    });
+
+    tl
+      // 1. Pulso holográfico final del logo
+      .to(logoRing, {
+        scale: 1.15,
+        filter: 'drop-shadow(0 0 45px rgba(23,184,254,0.85))',
+        duration: 0.35,
+        ease: 'power2.out',
+      })
+      // 2. Desvanecimiento suave del contenido central
+      .to(content, {
+        scale: 0.92,
+        opacity: 0,
+        duration: 0.35,
+        ease: 'power2.in',
+      }, '-=0.1')
+      // 3. Cortina oscura se disuelve revelando la página
+      .to(preloader, {
+        opacity: 0,
+        duration: 0.45,
+        ease: 'power2.out',
+      }, '-=0.2');
+  }
+
+  // Disparar transición cuando los recursos estén listos
+  if (document.readyState === 'complete') {
+    setTimeout(dismiss, 500);
+  } else {
+    window.addEventListener('load', () => {
+      setTimeout(dismiss, 350);
+    });
+  }
+
+  // Límite de tiempo máximo de seguridad (2.2s) para no bloquear al usuario en redes lentas
+  setTimeout(dismiss, 2200);
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * INICIALIZADOR PRINCIPAL
  * ------------------------------------------------------------------------------
  */
@@ -1084,20 +1155,20 @@ function initAllAnimations() {
   // 3. Transiciones de escala suave de las secciones de contenido
   initSectionZoomTransitions();
 
-  // 4. Animación de entrada exclusiva de la Navbar (solo al cargar)
-  initNavbarEntranceAnimation();
-
-  // 5. Micro-interacciones de cursor (hover) dentro de la Navbar
+  // 4. Micro-interacciones de cursor (hover) dentro de la Navbar
   initNavbarHoverInteractions();
 
-  // 6. Animación tipográfica y elementos del Hero
-  initHeroAnimations();
-
-  // 7. Animaciones de scroll para elementos internos
+  // 5. Animaciones de scroll para elementos internos
   initScrollTriggerAnimations();
 
-  // 8. Configuración de refrescos automáticos de ScrollTrigger y Lenis
+  // 6. Configuración de refrescos automáticos de ScrollTrigger y Lenis
   setupScrollTriggerRefreshes();
+
+  // 7. Preloader de inicio con logo de Ashly y entrada coordinada de Nav & Hero
+  initPreloader(() => {
+    initNavbarEntranceAnimation();
+    initHeroAnimations();
+  });
 }
 
 // Escuchar evento de carga seguro en el navegador

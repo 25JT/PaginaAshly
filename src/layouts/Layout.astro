@@ -24,7 +24,7 @@ import "../styles/global.css";
 
     <!-- Anti-FOUC (Previene parpadeo y efecto de recarga antes de GSAP) -->
     <script is:inline>
-      document.documentElement.classList.add('gsap-loading');
+      document.documentElement.classList.add("gsap-loading");
     </script>
     <style is:inline>
       /* Evita que Nav y Hero se pinten visibles antes de que GSAP tome control */
@@ -49,12 +49,90 @@ import "../styles/global.css";
   <body
     class="bg-ashly-bg text-slate-100 font-sans antialiased selection:bg-ashly-cyan selection:text-black min-h-screen relative overflow-x-hidden"
   >
+    <!-- Preloader de Inicio con Logo de Ashly -->
+    <div
+      id="preloader"
+      class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#02050f] select-none pointer-events-auto px-4"
+    >
+      <div
+        class="preloader-content flex flex-col items-center justify-center text-center max-w-sm mx-auto"
+      >
+        <!-- Contenedor del Logo con anillos concéntricos perfectamente alineados -->
+        <div
+          class="relative w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 flex items-center justify-center"
+        >
+          <!-- Resplandor ambiental de fondo -->
+          <div
+            class="absolute inset-0 bg-cyan-500/25 blur-3xl rounded-full pointer-events-none"
+          >
+          </div>
+
+          <!-- Anillo exterior secundario en rotación inversa -->
+          <div
+            class="absolute -inset-4 sm:-inset-5 rounded-full border border-dashed border-cyan-500/30 animate-spin [animation-duration:8s] [animation-direction:reverse]"
+          >
+          </div>
+
+          <!-- Anillo holográfico principal con gradiente cian-púrpura -->
+          <div
+            class="absolute -inset-2 sm:-inset-2.5 rounded-full border-2 border-transparent border-t-cyan-400 border-r-purple-500 animate-spin [animation-duration:2.8s]"
+          >
+          </div>
+
+          <!-- Pulso de radar suave -->
+          <div
+            class="absolute inset-0 rounded-full border border-cyan-400/40 animate-ping opacity-20"
+          >
+          </div>
+
+          <!-- Logo Central Grande en Alta Definición -->
+          <div
+            class="preloader-logo-ring relative w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full p-1.5 bg-gradient-to-tr from-cyan-500 via-sky-400 to-purple-500 shadow-[0_0_45px_rgba(23,184,254,0.6)]"
+          >
+            <img
+              alt="Ashly Logo"
+              class="w-full h-full rounded-full object-cover border-4 border-[#02050f]"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqc1QRz2k8LCCTPHe4_F5aetg6LoG15pVt_S9biea3AgU7TtqKiU0hpSpQts9Fvj1Az0hMOakXXZ2HnUsSV5jQnaHtsQtEyZxKxjLgeH7G2uyIDtohHMQA7b6nSbOm1c_TeZvP7spuI07FFTlWNYJymp6nkKP4yr9FJ-_7fAzWHfNLS8BY0O8yeUOuAPuBX4yn12uJ0a84vyspwyzrf6YDH830nfTXnS8LyS4iyps68mCqjdTW_6hHUEtQXxVzSnHnkr8"
+            />
+          </div>
+        </div>
+
+        <!-- Información de carga y barra de estado (Separada limpiamente sin solapamiento) -->
+        <div class="mt-8 sm:mt-10 flex flex-col items-center gap-3">
+          <span
+            class="font-sora font-extrabold text-white text-lg sm:text-xl tracking-wider uppercase"
+          >
+            Ashly Vtuber Asistente AI
+          </span>
+
+          <div
+            class="flex items-center gap-2 text-xs sm:text-sm font-mono tracking-widest text-cyan-300 uppercase"
+          >
+            <span
+              class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#17b8fe]"
+            ></span>
+            <span>Inicializando Sistema...</span>
+          </div>
+
+          <!-- Barra de progreso neón minimalista -->
+          <div
+            class="w-48 sm:w-56 h-1.5 rounded-full bg-[#050e20] overflow-hidden border border-cyan-800/60 p-[1px] mt-1 shadow-[0_0_15px_rgba(23,184,254,0.2)]"
+          >
+            <div
+              class="w-full h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-500 animate-pulse"
+            >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Canvas interactivo global: Matriz de puntos y difuminado dinámico con cursor -->
     <canvas
       id="global-dot-canvas"
       class="fixed inset-0 pointer-events-none z-0 w-full h-full"></canvas>
 
-    <div class="relative z-10 flex flex-col min-h-screen">
+    <div class="relative z-10 flex flex-col min-h-screen w-full max-w-full overflow-x-hidden min-w-0">
       <slot />
     </div>
 
