@@ -502,21 +502,21 @@ function initNavbarEntranceAnimation() {
   const statusBadge = header.querySelector('.nav-status-badge');
   const ctaBtn = header.querySelector('.nav-cta-btn');
 
-  gsap.set(header, { y: -80, opacity: 0 });
-  if (brand) gsap.set(brand, { opacity: 0, x: -25, scale: 0.9 });
-  if (links.length) gsap.set(links, { opacity: 0, y: -15 });
-  if (statusBadge) gsap.set(statusBadge, { opacity: 0, scale: 0.8 });
-  if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, x: 25, scale: 0.9 });
+  gsap.set(header, { y: -50, opacity: 0 });
+  if (brand) gsap.set(brand, { opacity: 0, x: -20, scale: 0.95 });
+  if (links.length) gsap.set(links, { opacity: 0, y: -10 });
+  if (statusBadge) gsap.set(statusBadge, { opacity: 0, scale: 0.85 });
+  if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, x: 20, scale: 0.95 });
 
   const navTl = gsap.timeline({
     defaults: { ease: 'power3.out' },
-    delay: 0.15,
+    delay: 0,
     onComplete: () => {
-      gsap.set(header, { clearProps: 'transform,opacity' });
-      if (brand) gsap.set(brand, { clearProps: 'opacity,transform,scale' });
-      if (links.length) gsap.set(links, { clearProps: 'opacity,transform' });
-      if (statusBadge) gsap.set(statusBadge, { clearProps: 'opacity,scale' });
-      if (ctaBtn) gsap.set(ctaBtn, { clearProps: 'opacity,transform,scale' });
+      gsap.set(header, { clearProps: 'all' });
+      if (brand) gsap.set(brand, { clearProps: 'all' });
+      if (links.length) gsap.set(links, { clearProps: 'all' });
+      if (statusBadge) gsap.set(statusBadge, { clearProps: 'all' });
+      if (ctaBtn) gsap.set(ctaBtn, { clearProps: 'all' });
     }
   });
 
@@ -675,16 +675,20 @@ function initHeroAnimations() {
 
   if (!words.length) return;
 
-  gsap.set(heroBadge, { y: -20, opacity: 0 });
-  gsap.set(words, { y: 45, opacity: 0, rotateX: -35, filter: 'blur(8px)' });
-  gsap.set(desc, { y: 25, opacity: 0 });
-  gsap.set(badgeItems, { scale: 0.85, opacity: 0, y: 15 });
-  gsap.set(cta, { scale: 0.9, opacity: 0, y: 20 });
+  gsap.set(heroBadge, { y: -15, opacity: 0 });
+  gsap.set(words, { y: 35, opacity: 0, rotateX: -25, filter: 'blur(6px)' });
+  gsap.set(desc, { y: 20, opacity: 0 });
+  gsap.set(badgeItems, { scale: 0.9, opacity: 0, y: 10 });
+  gsap.set(cta, { scale: 0.92, opacity: 0, y: 15 });
   gsap.set(subtext, { opacity: 0 });
 
+  // Liberar la clase anti-FOUC para que GSAP tome control continuo y fluido
+  document.documentElement.classList.remove('gsap-loading');
+
   const heroTl = gsap.timeline({
-    delay: 0.3,
+    delay: 0.05,
     onComplete: () => {
+      document.documentElement.classList.remove('gsap-loading');
       startHeroIdleLoop();
     },
   });

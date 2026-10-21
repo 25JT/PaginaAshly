@@ -21,6 +21,30 @@ import "../styles/global.css";
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Anti-FOUC (Previene parpadeo y efecto de recarga antes de GSAP) -->
+    <script is:inline>
+      document.documentElement.classList.add('gsap-loading');
+    </script>
+    <style is:inline>
+      /* Evita que Nav y Hero se pinten visibles antes de que GSAP tome control */
+      html.gsap-loading #main-header {
+        opacity: 0;
+        transform: translateY(-40px);
+      }
+      html.gsap-loading .hero-badge,
+      html.gsap-loading .hero-word,
+      html.gsap-loading .hero-desc,
+      html.gsap-loading .hero-badge-item,
+      html.gsap-loading .hero-cta-btn,
+      html.gsap-loading .hero-subtext {
+        opacity: 0;
+      }
+      html.gsap-loading .hero-word {
+        transform: translateY(35px);
+        filter: blur(8px);
+      }
+    </style>
   </head>
   <body
     class="bg-ashly-bg text-slate-100 font-sans antialiased selection:bg-ashly-cyan selection:text-black min-h-screen relative overflow-x-hidden"
