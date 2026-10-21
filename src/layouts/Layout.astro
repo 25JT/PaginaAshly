@@ -14,13 +14,8 @@ import "../styles/global.css";
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
     <title>Ashly - Asistente Virtual IA &amp; VTuber Inteligente Local</title>
-    <!-- Google Fonts: Sora, Inter & JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Preload del logo oficial para LCP y preloader instantáneo -->
+    <link rel="preload" as="image" href="/ashly-logo-256.webp" type="image/webp" />
 
     <!-- Anti-FOUC (Previene parpadeo y efecto de recarga antes de GSAP) -->
     <script is:inline>
@@ -92,7 +87,11 @@ import "../styles/global.css";
             <img
               alt="Ashly Logo"
               class="w-full h-full rounded-full object-cover border-4 border-[#02050f]"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqc1QRz2k8LCCTPHe4_F5aetg6LoG15pVt_S9biea3AgU7TtqKiU0hpSpQts9Fvj1Az0hMOakXXZ2HnUsSV5jQnaHtsQtEyZxKxjLgeH7G2uyIDtohHMQA7b6nSbOm1c_TeZvP7spuI07FFTlWNYJymp6nkKP4yr9FJ-_7fAzWHfNLS8BY0O8yeUOuAPuBX4yn12uJ0a84vyspwyzrf6YDH830nfTXnS8LyS4iyps68mCqjdTW_6hHUEtQXxVzSnHnkr8"
+              width="176"
+              height="176"
+              loading="eager"
+              decoding="async"
+              src="/ashly-logo-256.webp"
             />
           </div>
         </div>

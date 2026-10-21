@@ -1,4 +1,14 @@
 @import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/sora/400.css";
+@import "@fontsource/sora/600.css";
+@import "@fontsource/sora/700.css";
+@import "@fontsource/sora/800.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
 
 @theme {
   --color-ashly-bg: #040711;
@@ -14,8 +24,8 @@
   --color-ashly-text: #f1f5f9;
   --color-ashly-muted: #94a3b8;
 
-  --font-sora: 'Sora', sans-serif;
-  --font-sans: 'Inter', sans-serif;
+  --font-sora: 'Sora', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   --shadow-glow-cyan: 0 0 25px rgba(23, 184, 254, 0.28);
