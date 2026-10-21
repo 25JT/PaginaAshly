@@ -1,334 +1,115 @@
 ---
-
+// Ashly 3.0 Welcome / Hero Component
 ---
 
 <section
-  class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden dot-matrix-bg"
+  class="relative pt-8 pb-20 md:pt-14 md:pb-28 overflow-hidden dot-matrix-bg"
 >
   <!-- Ambient glow orbs -->
   <div
-    class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-sky-600/10 blur-[130px] rounded-full pointer-events-none"
+    class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[450px] bg-sky-600/15 blur-[150px] rounded-full pointer-events-none"
   >
   </div>
   <div
-    class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-purple-600/15 blur-[120px] rounded-full pointer-events-none"
+    class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[550px] h-[400px] bg-purple-600/15 blur-[140px] rounded-full pointer-events-none"
   >
   </div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-      <!-- Left Hero Content -->
-      <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
-        <div
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-ashly-cyan/40 text-xs text-ashly-cyan font-mono shadow-sm"
-        >
-          <span class="w-2 h-2 rounded-full bg-ashly-cyan animate-ping"></span>
-          ASISTENTE VIRTUAL IA CON PRESENCIA 3D &amp; AUTOMATIZACIÓN LOCAL
-        </div>
-        <h1
-          class="text-4xl sm:text-5xl lg:text-6xl font-sora font-extrabold text-white tracking-tight leading-[1.12]"
-        >
-          Tu compañera inteligente que <span
-            class="bg-gradient-to-r from-ashly-cyan via-sky-400 to-purple-400 bg-clip-text text-transparent"
-            >realmente opera</span
-          > tu ordenador.
-        </h1>
-        <p
-          class="text-base sm:text-lg text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light"
-        >
-          Ejecuta herramientas nativas en bucle, abre software, recuerda tus
-          proyectos y reacciona emocionalmente en tiempo real mediante su avatar
-          3D interactivo. Conmutable al instante entre <strong
-            class="text-white font-medium">Google Gemini Flash-Lite</strong
-          > y <strong class="text-white font-medium">Modelos Locales</strong> sin
-          censura ni pérdida de privacidad.
-        </p>
-        <!-- System Badges Feature -->
-        <div
-          class="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-2 text-xs font-mono"
-        >
-          <span
-            class="px-2.5 py-1 rounded bg-[#0b132b] text-sky-300 border border-sky-800/60 flex items-center gap-1.5"
-          >
-            🤖 Gemini 3.5 Flash-Lite
-          </span>
-          <span
-            class="px-2.5 py-1 rounded bg-[#1c0e35] text-purple-300 border border-purple-800/60 flex items-center gap-1.5"
-          >
-            💻 Modo Local (Ollama / GGUF)
-          </span>
-          <span
-            class="px-2.5 py-1 rounded bg-[#08221b] text-emerald-300 border border-emerald-800/60 flex items-center gap-1.5"
-          >
-            🛡️ Auditoría Inmutable
-          </span>
-        </div>
-        <!-- CTAs -->
-        <div
-          class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
-        >
-          <a
-            class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-ashly-cyan to-blue-600 hover:from-sky-300 hover:to-blue-500 text-slate-950 font-bold font-sora text-sm flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(23,184,254,0.4)] transition-all transform hover:-translate-y-0.5"
-            href="#descarga"
-          >
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"
-              ><path
-                d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.802"
-              ></path></svg
-            >
-            <span class="">Descargar Ashly 3.0 para Windows</span>
-          </a>
-        </div>
-        <p class="text-xs text-slate-400 font-mono">
-          Versión 3.0.4 • 64-bit • Sin telemetría oculta
-        </p>
-      </div>
-      <!-- Right Hero Mockup: Dual View of Ashly Real App -->
-      <div class="lg:col-span-6">
-        <div class="relative mx-auto max-w-lg lg:max-w-none">
-          <!-- Main Application Window Wrapper -->
-          <div
-            class="rounded-2xl bg-[#030611] border border-cyan-500/40 shadow-window overflow-hidden"
-          >
-            <!-- Windows OS Title Bar -->
-            <div
-              class="bg-[#001728] px-3.5 py-2 border-b border-cyan-900/50 flex items-center justify-between select-none"
-            >
-              <div class="flex items-center gap-2">
-                <span
-                  class="w-4 h-4 rounded-full overflow-hidden inline-block border border-cyan-400/50 shadow-[0_0_8px_rgba(23,184,254,0.4)]"
-                  ><img
-                    alt="Ashly Icon"
-                    class="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBedXJpKjugcyLa9PRuy1Pt17y7X8TEPOi1doGu8WzjHz6JjsYhiRd_qKFPI2V_elfe0JeRN2RK7wi9OBNnakXbvC4RyIpTEJYs3owPntJraT_JrA1zJdnTQ2xx1dtEc0mXz-jmYhhra_aLTk-263WvYyAQcr-7DnN6q7dXixOFPtUzhg0sECah6B-5yBjvRrsDR5FmW81iOAiipMsbQ2mznK0dFeoLj2mq-6xI0FiVABmOf7TXzunGgTdy3B8LxvRCVLs"
-                  /></span
-                >
-                <span class="text-xs font-mono text-cyan-200 tracking-wide"
-                  >Ashly 3.0 - Asistente &amp; VTuber Desktop&nbsp; AGREGAR
-                  ANIAMACION DE SALUDO</span
-                >
-              </div>
-            </div>
-            <!-- Software Content Frame -->
-            <div
-              class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-800/80 bg-[#050814]"
-            >
-              <!-- Left Sub-view: Real 3D Avatar (Image 5) -->
-              <div
-                class="relative flex flex-col items-center justify-between p-3 dot-matrix-dense min-h-[380px]"
-              >
-                <div
-                  class="w-full flex items-center justify-between text-[11px] font-mono text-cyan-400 px-1"
-                >
-                </div>
-                <!-- 3D Avatar Viewport -->
-                <div class="my-auto relative flex items-center justify-center">
-                  <img
-                    alt="Ashly Avatar 3D interactivo"
-                    class="max-h-[290px] w-auto object-contain rounded-lg drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] filter brightness-105"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPZlyYaAvD26XVflMbC4KWzJbUghWTsNngfWik2QlWZ7qhR9MC_R1o9xJLMFH1lld14L9SLyqMhAknb6YtBeFQACAfpI53Ouw7_4H0LE_Mlo-WUruZS5QYL2Ig8uQmnQgjv0ZufFd_niiYR2bZSYL3Cs9wcgG4LvqoliAObX-4cn2fqFR1mFo1nbKIHH2BBW48PZgJyWfKZ7sXXwBrN_dWbPV2ngEOF0q2As3IaTjbIWcm_5-GuHQk3V0DU0evQME-Ql4"
-                  />
-                </div>
-                <!-- Chat quick prompt inside viewport -->
-                <div class="w-full">
-                  <div
-                    class="w-full bg-[#031326]/90 border border-cyan-500/40 rounded-full px-3.5 py-1.5 flex items-center justify-between shadow-inner"
-                  >
-                    <span class="text-xs text-slate-400 font-mono"
-                      >Escribe aquí...</span
-                    >
-                    <svg
-                      class="w-3.5 h-3.5 text-ashly-cyan fill-current"
-                      viewBox="0 0 24 24"
-                      ><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
-                      ></path></svg
-                    >
-                  </div>
-                </div>
-              </div>
-              <!-- Right Sub-view: Active Chat Execution (Image 4 exact recreation) -->
-              <div
-                class="flex flex-col items-center justify-center bg-[#040816] p-2 overflow-hidden"
-              >
-                <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6f5uB0CWIsO-6k8QltZDPskahS1eGn227-6gcCoFtbJFA0FjAbVm5lYoQdWkKfmcSza8iXrKzaPdRHtyETgGM73Ae6n3LoQamYUNp8i59Bz8kE67rtjj_gQSMHyrjmpZbmttvfb2kUJl-C81777j48cGHDCbrieFdLtpnjyAigYV7arcTjL_Kqzb69W6RItlf1IU4eU4A1XC8B4G9ulrrnat2OWg0VshNqCCfld5F_JMQ48hlL5qFjwDy4UE4kEPvbqM"
-                  alt="Ashly Chat y Sesiones en Vivo"
-                  class="max-h-[380px] w-auto object-contain rounded-lg shadow-lg border border-cyan-900/40 filter brightness-105"
-                />
-              </div>
-            </div>
-            <!-- Software Bottom Navigation Bar (recreated from Image 3 & 4) -->
-          </div>
-          <!-- Floating feature tag -->
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- END: HeroSection -->
-<!-- BEGIN: FeatureWindowsGallery -->
-<section
-  class="py-20 bg-[#030611] border-y border-ashly-border relative"
-  id="interfaz"
->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-      <span
-        class="text-xs font-mono text-ashly-cyan uppercase tracking-widest px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/40"
-        >Fidelidad visual nativa</span
-      >
-      <h2 class="text-3xl sm:text-4xl font-sora font-extrabold text-white mt-3">
-        Diseñada para trabajar en tu escritorio, no en una pestaña
-      </h2>
-      <p class="text-slate-400 text-sm sm:text-base mt-2">
-        Explora los módulos exactos del software cliente que controlan modelos
-        locales, memoria a largo plazo y automatizaciones del sistema operativo.
-      </p>
-    </div>
-    <!-- Grid of 3 Windows Recreated directly from App Screenshots -->
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start"
-    >
-      <!-- CARD 1: Configuración & Modelos (Image 3) -->
-      <!-- This container displays the Configuration and Model Switcher exactly as seen in Image 3 -->
-      <div
-        class="bg-[#05091b] rounded-2xl border border-ashly-border overflow-hidden shadow-window transition-all duration-300 hover:border-cyan-500/50 flex flex-col"
-      >
-        <div
-          class="bg-[#020f1e] px-4 py-2.5 border-b border-cyan-950 flex items-center justify-between"
-        >
-          <span
-            class="text-xs font-mono text-cyan-300 font-semibold flex items-center gap-1.5"
-          >
-            <span class="">⚙️</span> Configuración del Asistente
-          </span>
-          <span class="text-[10px] text-slate-400 font-mono">MODO: HÍBRIDO</span
-          >
-        </div>
-        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-          <!-- Ashly Asistente IA status header -->
-          <div
-            class="flex items-center justify-center gap-2 font-sora font-bold text-lg text-white"
-          >
-            <span
-              class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"
-            ></span>
-            <h3 class="">Ashly Asistente IA</h3>
-          </div>
-          <!-- Active Model Card -->
-          <div
-            class="bg-[#040817] border border-cyan-900/60 rounded-xl p-3 text-center"
-          >
-            <div
-              class="text-xs text-purple-400 font-medium flex items-center justify-center gap-1"
-            >
-              <span class="">🤖</span> Modelo Activo
-            </div>
-            <div class="text-xs font-mono text-purple-200 mt-1 font-semibold">
-              Google Gemini (gemini-3.5-flash-lite)
-            </div>
-          </div>
-          <!-- Configuration Action Buttons (exact copy of Screenshot 3) -->
-          <div class="space-y-2.5">
-            <!-- Cambiar a Modelo Local -->
-            <button
-              class="w-full py-2.5 px-4 rounded-xl bg-[#3b1d6e] hover:bg-[#4c1d95] text-white text-xs font-semibold flex items-center gap-2.5 border border-purple-500/40 shadow-sm transition-all"
-            >
-              <span class="text-base">💻</span>
-              <span class="">Cambiar a Modelo Local</span>
-            </button>
-            <!-- Gestión de Memoria -->
-            <button
-              class="w-full py-2.5 px-4 rounded-xl bg-[#09152b] hover:bg-[#0c1f3d] text-white text-xs font-medium flex items-center gap-2.5 border border-cyan-900/80 transition-all"
-            >
-              <span class="text-base">🧠</span>
-              <span class="">Gestión de Memoria</span>
-            </button>
-            <!-- Cambiar Avatar -->
-            <button
-              class="w-full py-2.5 px-4 rounded-xl bg-[#09152b] hover:bg-[#0c1f3d] text-white text-xs font-medium flex items-center gap-2.5 border border-cyan-900/80 transition-all"
-            >
-              <span class="text-base">👤</span>
-              <span class="">Cambiar Avatar...</span>
-            </button>
-            <!-- Salir button -->
-            <button
-              class="w-full py-2.5 px-4 rounded-xl bg-[#130d1d] hover:bg-[#200f1c] text-rose-300 text-xs font-medium flex items-center gap-2.5 border border-rose-900/40 transition-all"
-            >
-              <span class="text-base">✕</span>
-              <span class="">Salir</span>
-            </button>
-          </div>
-          <div
-            class="pt-2 text-[11px] text-slate-400 border-t border-slate-800"
-          >
-            * Cambia dinámicamente entre API ultrarrápida y ejecución local sin
-            desconectar el estado de la conversación.
-          </div>
-        </div>
-      </div>
-      <!-- CARD 2: Chat & Historial de Sesiones (Image 4) -->
-      <!-- Faithful reproduction of the Chat Timeline & Session Tabs -->
-      <div
-        class="bg-[#05091b] rounded-2xl border border-ashly-border overflow-hidden shadow-window transition-all duration-300 hover:border-cyan-500/50 flex flex-col"
-      >
-        <div
-          class="bg-[#020f1e] px-4 py-2.5 border-b border-cyan-950 flex items-center justify-between"
-        >
-          <span
-            class="text-xs font-mono text-cyan-300 font-semibold flex items-center gap-1.5"
-          >
-            <span class="">💬</span> Historial y Sesiones
-          </span>
-          <span class="text-[10px] text-slate-400 font-mono">10 EVENTOS</span>
-        </div>
-        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-          <div class="flex flex-col items-center justify-center">
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQg6U6-j2oZ7PhQResVFjhwltWHstf4ELk_RaBXn1gIdbR5XRwU202ojmc9JZDEpnZV92fHeo5zwZ7Dg1XGvriRgY4zkAr4x8X0ze0CzCuEuP_kXH0w_wGEmJok8y_mbb7AAFNAn2RbYl35_4Mz0CKrtPGLCcmajsDPPszAPgsfQz8Xe2lwi0C_me-oK6g-2vE-vklSL144dPS12iA5C3PdkGXqMiBXXRwcj9ES_EdqKGIqgStwyk3-o2CfYGsZVHWDvM"
-              alt="Historial y Sesiones - Chat en vivo"
-              class="w-full max-h-[320px] object-contain rounded-xl shadow-lg border border-cyan-900/40 hover:border-cyan-500/50 transition-all"
-            />
-          </div><div class="text-[11px] text-slate-400 mt-2">
-            * Detección de intenciones inmediata: la IA interpreta lenguaje
-            natural y lo traduce a llamadas de API del sistema.
-          </div>
-        </div>
-      </div>
-      <!-- CARD 3: Interfaz del Avatar 3D (Image 5) -->
-      <!-- Container for Live VTuber / 3D Canvas visualizer -->
-      <div
-        class="bg-[#05091b] rounded-2xl border border-ashly-border overflow-hidden shadow-window transition-all duration-300 hover:border-cyan-500/50 flex flex-col"
-      >
-        <div
-          class="bg-[#020f1e] px-4 py-2.5 border-b border-cyan-950 flex items-center justify-between"
-        >
-          <span
-            class="text-xs font-mono text-cyan-300 font-semibold flex items-center gap-1.5"
-          >
-            <span class="">👤</span> Visor de Avatar 3D VRM
-          </span>
-          <span class="text-[10px] text-emerald-400 font-mono"
-            >TRACKING ACTIVO</span
-          >
-        </div>
-        <div
-          class="p-5 flex-1 flex flex-col items-center justify-between space-y-4 dot-matrix-dense"
-        >
-          <div class="relative w-full flex justify-center py-2">
-            <img
-              alt="Ashly Avatar Model View"
-              class="h-64 object-contain rounded-lg drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)]"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCukvbWEC8b97lzoKMbPVamsw8vmCnY9EgVCaFHkec2jNjnSILS4wDTCwizwv6IJPgSMqI8YEQrkDXutskmwx3r22lri54_cNORztRSfb4AsPjwrq7Ftz_o6eKuFjkhQUgo0HUHA1jOivjtW6BlKDb--0u-qCWegQBroF--v7LiNdMhfT9u2OcUSh3or89TvLGYQHT9mViXXcNjWCqBvjvMgNMoM-YeEbM0Vp5LAPSEpBIs5y-_bENeKBOeZiSnOl9PSYo"
-            />
-          </div>
 
-          <div class="w-full text-[11px] text-slate-400 text-center">
-            Reacciones basadas en el estado emocional computado en cada
-            respuesta (Neutro, Alegría, Sorpresa, Pensativo).
-          </div>
-        </div>
-      </div>
+  <div
+    class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center flex flex-col items-center"
+  >
+    <!-- Badge -->
+    <div
+      class="hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-ashly-cyan/40 text-xs text-ashly-cyan font-mono shadow-[0_0_15px_rgba(23,184,254,0.15)] mb-6 sm:mb-8"
+    >
+      <span class="w-2 h-2 rounded-full bg-ashly-cyan animate-ping"></span>
+      ASISTENTE VIRTUAL IA CON PRESENCIA 3D &amp; AUTOMATIZACIÓN LOCAL
     </div>
+
+    <!-- Main Title (Properly closed, perfectly spaced) -->
+    <h1
+      class="hero-title text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-sora font-extrabold text-white tracking-tight leading-[1.14] max-w-5xl mx-auto select-none"
+    >
+      <span class="block">
+        <span
+          class="hero-word inline-block will-change-transform cursor-default"
+          >Tu</span
+        >{" "}
+        <span
+          class="hero-word inline-block will-change-transform cursor-default"
+          >compañera</span
+        >{" "}
+        <span
+          class="hero-word inline-block will-change-transform cursor-default"
+          >inteligente</span
+        >{" "}
+        <span
+          class="hero-word inline-block will-change-transform cursor-default"
+          >que</span
+        >
+      </span>
+      <span class="block mt-2 sm:mt-3">
+        <span
+          class="hero-word hero-highlight inline-block bg-gradient-to-r from-ashly-cyan via-sky-400 to-purple-400 bg-clip-text text-transparent filter drop-shadow-[0_0_30px_rgba(23,184,254,0.45)] will-change-transform cursor-default"
+        >
+          Opera en tu ordenador.
+        </span>{" "}
+      </span>
+    </h1>
+
+    <!-- Justified Description Text (Generous vertical space between title and description) -->
+    <p
+      class="hero-desc text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light text-justify [text-align-last:center] mt-8 sm:mt-11 mb-8 sm:mb-11"
+    >
+      Ejecuta herramientas nativas en bucle, abre software, recuerda tus
+      proyectos y reacciona emocionalmente en tiempo real mediante su avatar 3D
+      interactivo. Conmutable al instante entre <strong
+        class="text-white font-medium">Google Gemini Flash-Lite</strong
+      > y <strong class="text-white font-medium">Modelos Locales</strong> sin censura
+      ni pérdida de privacidad.
+    </p>
+
+    <!-- System Badges Feature -->
+    <div
+      class="hero-badges flex flex-wrap items-center justify-center gap-3.5 mb-8 sm:mb-11 text-xs font-mono"
+    >
+      <span
+        class="hero-badge-item px-3.5 py-1.5 rounded-lg bg-[#0b132b] text-sky-300 border border-sky-800/60 flex items-center gap-1.5 shadow-sm"
+      >
+        🤖 Gemini 3.5 Flash-Lite
+      </span>
+      <span
+        class="hero-badge-item px-3.5 py-1.5 rounded-lg bg-[#1c0e35] text-purple-300 border border-purple-800/60 flex items-center gap-1.5 shadow-sm"
+      >
+        💻 Modo Local (Ollama / GGUF)
+      </span>
+      <span
+        class="hero-badge-item px-3.5 py-1.5 rounded-lg bg-[#08221b] text-emerald-300 border border-emerald-800/60 flex items-center gap-1.5 shadow-sm"
+      >
+        🛡️ Auditoría Inmutable
+      </span>
+    </div>
+
+    <!-- CTAs (Generous spacing for download button) -->
+    <div
+      class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3"
+    >
+      <a
+        class="hero-cta-btn w-full sm:w-auto px-10 py-4 rounded-xl bg-gradient-to-r from-ashly-cyan to-blue-600 hover:from-sky-300 hover:to-blue-500 text-slate-950 font-bold font-sora text-sm flex items-center justify-center gap-3 shadow-[0_0_35px_rgba(23,184,254,0.45)] transition-all transform hover:-translate-y-0.5 active:scale-95"
+        href="#descarga"
+      >
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"
+          ><path
+            d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.802"
+          ></path></svg
+        >
+        <span>Descargar Ashly para Windows</span>
+      </a>
+    </div>
+
+    <p class="hero-subtext text-xs text-slate-400 font-mono">
+      Versión 1.0.0 • 64-bit • Sin telemetría oculta
+    </p>
   </div>
 </section>
 <!-- END: FeatureWindowsGallery -->
@@ -369,7 +150,7 @@
           >
           <span
             class="text-xs font-mono text-cyan-200 font-semibold tracking-wider"
-            >Ashly 3.0 - Gestión de Memoria</span
+            >Ashly - Gestión de Memoria</span
           >
         </div>
         <div class="flex items-center gap-2.5 text-slate-400 text-xs font-mono">
@@ -474,7 +255,7 @@
                     class="py-2 px-4 text-emerald-400 font-medium border-r border-cyan-950/60"
                     >abrir_programa</td
                   ><td class="py-2 px-4 text-slate-100"
-                    >Resultado de abrir_programa: He abierto Visual Studio Code.</td
+                    >Resultado de abrir_programa: He abierto OpenCode.</td
                   ></tr
                 ><tr class="hover:bg-[#091530]/60 transition-colors"
                   ><td
@@ -525,7 +306,7 @@
                     class="py-2 px-4 text-slate-500 border-r border-cyan-950/60"
                     >-</td
                   ><td class="py-2 px-4 text-sky-200 font-mono"
-                    >Hitos generados: ['abrir_programa("code")']</td
+                    >Hitos generados: ['abrir_programa("OpenCode")']</td
                   ></tr
                 ><tr
                   class="hover:bg-[#091530]/60 transition-colors bg-[#030713]/40"
@@ -593,7 +374,7 @@
                     >crear_carpeta</td
                   ><td class="py-2 px-4 text-slate-100"
                     >Resultado de crear_carpeta: ÉXITO: Se ha creado la carpeta
-                    'ashly v4' en C:\Users\jhoni\OneDrive\Escritorio.</td
+                    'ashly v4' en C:\Users\Users\OneDrive\Escritorio.</td
                   ></tr
                 ><tr
                   class="hover:bg-[#091530]/60 transition-colors bg-[#030713]/40"
@@ -645,7 +426,7 @@
                     class="py-2 px-4 text-slate-500 border-r border-cyan-950/60"
                     >-</td
                   ><td class="py-2 px-4 text-sky-200 font-mono"
-                    >Hitos generados: ['crear_carpeta("ashly v4")']</td
+                    >Hitos generados: ['crear_carpeta("ashly")']</td
                   ></tr
                 ><tr class="hover:bg-[#091530]/60 transition-colors"
                   ><td
@@ -677,7 +458,7 @@
                     class="py-2 px-4 text-slate-500 border-r border-cyan-950/60"
                     >-</td
                   ><td class="py-2 px-4 text-cyan-200 font-medium"
-                    >El usuario solicitó: crea una carpeta llamala ashly v4</td
+                    >El usuario solicitó: crea una carpeta llamala ashly</td
                   ></tr
                 ></tbody
               >
@@ -772,7 +553,7 @@
         >Descarga Oficial</span
       >
       <h2 class="text-4xl font-sora font-extrabold text-white mt-3">
-        Comienza a usar Ashly 3.0 hoy
+        Comienza a usar Ashly hoy
       </h2>
       <p class="text-slate-400 text-sm sm:text-base mt-2">
         Instalador completo con soporte integrado para DirectX 12, aceleración
@@ -790,9 +571,13 @@
           Recomendado
         </div><div class="text-center flex flex-col items-center">
           <div
-            class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-2xl mb-4"
+            class="w-24 h-24 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-2xl mb-4"
           >
-            🪟
+            <img
+              alt="Ashly Logo"
+              class="w-full h-full object-cover border border-[#17b8fe]/60 shadow-[0_0_12px_rgba(23,184,254,0.4)]"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqc1QRz2k8LCCTPHe4_F5aetg6LoG15pVt_S9biea3AgU7TtqKiU0hpSpQts9Fvj1Az0hMOakXXZ2HnUsSV5jQnaHtsQtEyZxKxjLgeH7G2uyIDtohHMQA7b6nSbOm1c_TeZvP7spuI07FFTlWNYJymp6nkKP4yr9FJ-_7fAzWHfNLS8BY0O8yeUOuAPuBX4yn12uJ0a84vyspwyzrf6YDH830nfTXnS8LyS4iyps68mCqjdTW_6hHUEtQXxVzSnHnkr8"
+            />
           </div><h3 class="font-sora font-bold text-white text-xl">
             Windows 10 / 11
           </h3><div
@@ -807,9 +592,6 @@
             ><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"
               ><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></svg
             ><span class="">Instalador (.exe) - 248 MB</span></button
-          ><button
-            class="w-full py-2 px-3 rounded-lg bg-[#071026] hover:bg-[#0c1a3e] text-slate-300 text-xs font-mono border border-slate-800 transition-all"
-            >Versión Portable (.zip)</button
           >
         </div>
       </div>
@@ -820,9 +602,9 @@
     >
       <div class="">
         <span class="text-white font-semibold">Requisitos mínimos:</span
-        >&nbsp;Conexión para Gemini API o 16 GB RAM para modelos locales 8B.
-        Puedes elegir el modelo de tu gusto en local pero esto no asegura el
-        correcto funcionamiento de ashly.
+        >&nbsp;Conexión para Gemini API o 16 GB RAM y graficas superiores a 8 GB
+        de vram para modelos locales 8B. Puedes elegir el modelo de tu gusto en
+        local o nube.
       </div>
     </div>
   </div>
@@ -886,8 +668,7 @@
           </div>
           <p class="text-xs text-slate-300 mt-4 leading-relaxed">
             Ideal para usuarios que disfrutan del asistente y desean apoyar el
-            café del desarrollador. Incluye acceso al rol Supporter en Discord e
-            insignia en la comunidad.
+            café del desarrollador.
           </p>
         </div>
         <div class="mt-8">
@@ -925,9 +706,8 @@
             >
           </div>
           <p class="text-xs text-slate-200 mt-4 leading-relaxed">
-            Acceso prioritario a compilaciones beta de Ashly, modelos VRM
-            exclusivos, canal privado de soporte técnico y canal de votación de
-            funciones.
+            Acceso prioritario a compilaciones beta de Ashly, canal privado de
+            soporte técnico y canal de votación de funciones.
           </p>
         </div>
         <div class="mt-8">
@@ -959,9 +739,8 @@
             <span class="text-xs font-mono text-slate-400">USD / mes</span>
           </div>
           <p class="text-xs text-slate-300 mt-4 leading-relaxed">
-            Mención grabada en el registro de auditoría / créditos oficiales de
-            la aplicación, acceso directo al roadmap de APIs y prioridad para
-            sugerir integraciones nativas del SO.
+            Mención grabada en el registro de auditoría, acceso directo al
+            roadmap y prioridad para sugerir integraciones nativas para ashly.
           </p>
         </div>
         <div class="mt-8">
@@ -1017,11 +796,12 @@
         <div
           class="px-5 pb-5 pt-1 text-slate-300 text-sm font-light leading-relaxed border-t border-slate-900"
         >
-          No. Si utilizas el modo Local (Ollama/GGUF), todo el procesamiento del
-          lenguaje y la memoria reside 100% en tu almacenamiento local y GPU. Si
-          activas la integración opcional con Google Gemini Flash-Lite, solo el
-          prompt del turno actual viaja cifrado a la API oficial de Google, sin
-          compartir tu registro de auditoría ni tus archivos personales.
+          No. Si utilizas el modo Local (Ollama/llmstudio), todo el
+          procesamiento del lenguaje y la memoria reside 100% en tu
+          almacenamiento local y GPU. Si activas la integración opcional con
+          Google Gemini Flash-Lite, solo el prompt del turno actual viaja
+          cifrado a la API oficial de Google, sin compartir tu registro de
+          auditoría ni tus archivos personales.
         </div>
       </div>
 
@@ -1093,9 +873,9 @@
           class="px-5 pb-5 pt-1 text-slate-300 text-sm font-light leading-relaxed border-t border-slate-900"
         >
           Para el motor de avatar 3D y Gemini API basta con una GPU básica (GTX
-          1060 / RX 580 o Apple Silicon M1). Para ejecutar modelos cuantizados
-          locales (ej. Qwen o Llama 3 8B en GGUF) se recomiendan al menos 16 GB
-          de RAM del sistema o 8 GB de VRAM dedicada.
+          1060 / RX 580). Para ejecutar modelos cuantizados locales (ej. Qwen o
+          Llama 3 8B en GGUF) se recomiendan al menos 16 GB de RAM del sistema y
+          8 GB de VRAM dedicada.
         </div>
       </div>
 
@@ -1105,7 +885,7 @@
       >
         <div class="p-5 flex items-center justify-between cursor-pointer">
           <div class="flex items-center gap-3">
-            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
             <span class="font-sora font-bold text-white text-base sm:text-lg"
               >¿El proyecto es gratuito y de código abierto?</span
             >
@@ -1119,6 +899,27 @@
           No, por el momento el codigo de ashly es privado pero se espera a
           tener una version mas estable. Las donaciones son voluntarias y ayudan
           a mantener la infraestructura y el desarrollo activo.
+        </div>
+      </div>
+      <!-- Item 5 -->
+      <div
+        class="rounded-xl bg-[#05091b] border border-ashly-border overflow-hidden transition-all duration-300 hover:border-cyan-500/40"
+      >
+        <div class="p-5 flex items-center justify-between cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-green-400"></span>
+            <span class="font-sora font-bold text-white text-base sm:text-lg"
+              >¿Donaciones?</span
+            >
+          </div>
+          <span class="text-ashly-cyan font-mono text-sm ml-4 font-bold">+</span
+          >
+        </div>
+        <div
+          class="px-5 pb-5 pt-1 text-slate-300 text-sm font-light leading-relaxed border-t border-slate-900"
+        >
+          Las donaciones son voluntarias y ayudan a mantener la infraestructura
+          y el desarrollo activo de ashly.
         </div>
       </div>
     </div>
